@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public class UserDaoImp implements UserDao {
+   private final String findUSerByModelAndSeriesHql = "from User user where user.car.model = :model and user.car.series = :series";
 
    @Autowired
    private SessionFactory sessionFactory;
@@ -28,11 +29,10 @@ public class UserDaoImp implements UserDao {
    }
 
    @Override
-   public User findUserByCar(String model, Integer series) {
-      String hql = "from User user where user.car.model = :model and user.car.series = :series";
-      TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery(hql);
+   public User findUserByModelAndSeries(String model, Integer series) {
+      TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery(findUSerByModelAndSeriesHql);
       query.setParameter("model", model).setParameter("series", series);
-      return query.setMaxResults(1).getSingleResult();
+      return query.getSingleResult();
    }
 
 }
